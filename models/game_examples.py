@@ -26,7 +26,7 @@ def update_game(id):
     print(response)
 
 def delete_game(id):
-    client.game.delete(id=id)
+    client.games.delete(id=id)
 
 
 if __name__ == "__main__":
