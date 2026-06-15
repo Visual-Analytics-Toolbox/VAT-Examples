@@ -65,4 +65,20 @@ Some VAT endpoints contain millions of entries. When querying frame-level data s
 for team_state in client.teamstate.list(log=1):
     print(team_state)
 ```
+### Querying the API via the browser
 
+API endpoints can also be opened directly in an authenticated browser to quickly verify that an endpoint exists and inspect the data it returns.
+
+For example, the same team list queried by get_teams.py can be accessed by appending "/api/teams/" to the VAT base URL:
+
+```
+https://vat.berlin-united.com/api/teams/
+```
+
+Endpoints can also be filtered using query parameters. For example, to retrieve cognition frames for log ID 30:
+
+```
+https://vat.berlin-united.com/api/cognitionframe/?log=30
+```
+
+The `?` marks the beginning of the query string and is required before the first filter parameter. Additional parameters can be appended using `&`.
