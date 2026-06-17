@@ -1,12 +1,12 @@
 from vaapi.client import Vaapi
 from vaapi.types.image import Image
+from vaapi.types.cognition_frame import CognitionFrame
 import os
 import requests
 import cv2
-import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Button
 import numpy as np
+from cognition_frame_examples import bulk_create_cognitionframe
 
 def get_images():
     response = client.image.list(log=171)
@@ -31,7 +31,7 @@ def count_images():
     response = client.image.get_image_count(log=171,camera="TOP")
     print(f"There are {response["count"]} images matching the filter criterias")
 
-def get_and_update_img():
+def bulk_update_img():
     imgs = client.image.list(log=282)
     imgs_to_update = []
     for img in imgs:
@@ -52,6 +52,22 @@ def create_image():
     resp = client.cognitionframe.create(log=171,frame_number=300000,frame_time=30)
     response = client.image.create(camera="TOP",type="JPEG",log=171,frame=resp.id)
     return response
+
+def bulk_create_cognitionframe(log_id):
+    cognition_frames = []
+    for x in range(2,20):
+        cognition_frames.append(CognitionFrame(log=log_id,frame_number=x,frame_time=x))
+
+    client.cognitionframe.bulk_create(frame_list=cognition_frames)
+
+def bulk_create_images(log_id):
+    cognitionframes = client.cognitionframe.list(log=log_id)
+    imgs = []
+    for frame in cognitionframes:
+        #none of these fields can be omitted when using bulk create
+        imgs.append(Image(log=log_id,frame=frame.id,camera="TOP",type="JPEG",image_url="test",blurredness_value=None,brightness_value=None))
+    
+    client.image.bulk_create(data_list=imgs)
 
 def update_image(id):
     response = client.image.update(id=id,blurredness_value=100)
@@ -106,5 +122,12 @@ if __name__ == "__main__":
     # delete_image(image.id)
     # download_image()
     # count_images()
-    # get_and_update_img()
+    # bulk_update_img()
     brightness_histogram()
+
+    # log = client.logs.create(game=441,robot=6,player_number=5)
+    # cognitionframes = bulk_create_cognitionframe(log.id)
+    # bulk_create_images(log.id)
+
+    #cleanup created data
+    #client.logs.delete(log.id)
