@@ -48,10 +48,7 @@ if my_list:
     print(my_list)
 ```
 
-The list() methods return iterable generators. Results are fetched as they are requested rather than loading the complete dataset into memory:
-
-
-Each returned item is a Python model object whose fields can be accessed directly, such as team.id, team.team_id, and team.name.
+The list() methods return iterable generators. Results are fetched as they are requested rather than loading the complete dataset into memory. Each returned item is a Python model object whose fields can be accessed directly, such as team.id and team.name:
 
 ```
 d = {team.id: team.name for team in my_list}
@@ -59,12 +56,15 @@ print()
 print(d)
 ```
 
+Output example:
+```
+[Team(id=1, team_id=0, name='Invisibles'), Team(id=2, team_id=3, name='Bembelbots'),...]
+```
+
 Some VAT endpoints contain millions of entries. When querying frame-level data such as images or team states, always filter by log ID, for example:
 
-```
-for team_state in client.teamstate.list(log=1):
-    print(team_state)
-```
+TODO: add example with behaviour
+
 ### Querying the API via the browser
 
 API endpoints can also be opened directly in an authenticated browser to quickly verify that an endpoint exists and inspect the data it returns.
@@ -81,4 +81,4 @@ Endpoints can also be filtered using query parameters. For example, to retrieve 
 https://vat.berlin-united.com/api/cognitionframe/?log=30
 ```
 
-The `?` marks the beginning of the query string and is required before the first filter parameter. Additional parameters can be appended using `&`.
+The `?` in `?log=30` marks the beginning of the query string and is required before the first filter parameter. Additional parameters can be appended using `&`.
