@@ -109,6 +109,17 @@ def brightness_histogram():
     ax2.hist(blurredness_values)
     plt.show()
 
+def count_images_with_annoations(event):
+    logs = client.logs.list(event=event)
+
+    total_count = 0
+
+    for log in logs:
+        count = client.image.get_image_count(log=log,has_annotations=True)
+        total_count += count["count"]
+
+    print(total_count)
+
 if __name__ == "__main__":
     client = Vaapi(
         base_url=os.environ.get("VAT_API_URL"),
@@ -123,7 +134,7 @@ if __name__ == "__main__":
     # download_image()
     # count_images()
     # bulk_update_img()
-    brightness_histogram()
+    #brightness_histogram()
 
     # log = client.logs.create(game=441,robot=6,player_number=5)
     # cognitionframes = bulk_create_cognitionframe(log.id)
@@ -131,3 +142,6 @@ if __name__ == "__main__":
 
     #cleanup created data
     #client.logs.delete(log.id)
+
+
+    count_images_with_annoations(10)
